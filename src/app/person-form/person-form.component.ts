@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 function emailMatcher(c: AbstractControl): { [key: string]: boolean } | null {
   const emailControl = c.get('email');
@@ -39,16 +39,15 @@ export class PersonFormComponent implements OnInit {
         email:['',[Validators.email]],
         confirmEmail:['',[Validators.email]]
       }, { validator: emailMatcher }),
-    
+      sendCatalog:true,
+      addresses : this.formBuilder.array([this.buildAddress()])
     })
-
     this.personForm.get('notification').valueChanges.subscribe(
       res =>{
         console.log(res)
         this.setNotification(res)
       }
     )
-
 
     const emailControl = this.personForm.get('emailGroup.email');
     emailControl.valueChanges.pipe(
@@ -57,6 +56,24 @@ export class PersonFormComponent implements OnInit {
       value => this.setMessage(emailControl)
     );
 
+    this.personForm.get('sendCatalog').valueChanges.subscribe(
+      res => console.log(res)
+    )
+  }
+
+
+  get addresses():FormArray{
+    return <FormArray>this.personForm.get('addresses')
+  }
+
+  addaddresses():void{
+  this.addresses.push(this.buildAddress())
+}
+  buildAddress(){
+   return this.formBuilder.group({
+      adress1: '',
+      adress2: ''
+    })
   }
   setNotification(val:string){
     if (val == 'email'){

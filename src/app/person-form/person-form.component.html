@@ -23,9 +23,12 @@
   <button (click)="makeemailRequired()">email is required</button>
   <!-- formGroupName -->
   <div class="email" formGroupName="emailGroup">
-    <input formControlName="email" type="email" [ngClass]="{invalid:emailMessage}" />
-    <span >{{emailMessage}}</span
-    >
+    <input
+      formControlName="email"
+      type="email"
+      [ngClass]="{ invalid: emailMessage }"
+    />
+    <span>{{ emailMessage }}</span>
     <!-- <span *ngIf="personForm.get('emailGroup.email').errors?.email"
       >enter valid email
     </span> -->
@@ -38,12 +41,40 @@
   </div>
   <div>
     <span
-      >phone <input  formControlName="notification" value="phone" type="radio"
+      >phone <input formControlName="notification" value="phone" type="radio"
     /></span>
     <span
-      >email <input  formControlName="notification" value="email" type="radio"
+      >email <input formControlName="notification" value="email" type="radio"
     /></span>
   </div>
+
+  <hr />
+  <span>
+    sendme notification to home
+    <input formControlName="sendCatalog" type="checkbox" />
+  </span>
+  <hr />
+  <div *ngIf="personForm.get('sendCatalog').value">
+    <div
+      formArrayName="addresses"
+      *ngFor="let address of addresses.controls; let i = index"
+    >
+      <div [formGroupName]="i">
+        <span
+          >addres 1
+          <input
+            formControlName="adress1"
+            id="{{ 'street1Id' + i }}"
+            type="text"
+          />
+        </span>
+        <span>addres 2 <input formControlName="adress2" type="text" /> </span>
+      </div>
+     
+    </div>
+     <button type="button" (click)="addaddresses()">add address</button>
+  </div>
+
   <button class="submt" [disabled]="personForm.invalid" type="submit">
     submit
   </button>
